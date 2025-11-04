@@ -15,6 +15,7 @@ class Points {
         final item = items[index];
         if (item != null) {
             item.set(x, y);
+            // DRY:
             index++;
             return item;
         }

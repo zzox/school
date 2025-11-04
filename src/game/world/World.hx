@@ -2,7 +2,6 @@ package game.world;
 
 import core.Types.IntVec2;
 import core.util.Util;
-import game.data.Leads;
 import game.data.Maps.map1;
 import game.util.Pathfind;
 import game.util.TimeUtil as Time;
@@ -51,35 +50,37 @@ class World {
 
     public var events:Array<Event> = [];
 
-    public var leadMap:Map<LeadTier, Int> = [
-        TierS => 0,
-        TierA => 0,
-        TierB => 0,
-        TierC => 0,
-    ];
-
     public function new () {
-        final size = new IntVec2(12, 12);
-        entrance = new IntVec2(5, 0);
-        exit = new IntVec2(7, 0);
+        // entrance = new IntVec2(5, 0);
+        // exit = new IntVec2(7, 0);
 
         final rows = map1.split('\n').filter((item) -> {
             return item != '';
         });
 
-        startGrid = makeGrid(size.x, size.y, 1);
+        final width = rows[0].length;
+        final height = rows.length;
 
-        grid = mapGI(makeGrid(rows[0].length, rows.length, Tile), (x, y, item) -> {
-            if (entrance.x == x && entrance.y == y) return Entrance;
-            if (exit.x == x && exit.y == y) return Exit;
-            if (rows[y].charAt(x) == '-') {
+        startGrid = makeGrid(width, height, 1);
+
+        grid = mapGI(makeGrid(width, height, Tile), (x, y, item) -> {
+            final char = rows[y].charAt(x);
+            if (char == 'E') {
+                entrance = new IntVec2(x, y);
+                return Entrance;
+            }
+            if (char == 'X') {
+                exit = new IntVec2(x, y);
+                return Exit;
+            }
+            if (char == '-') {
                 setGridItem(startGrid, x, y, 0);
                 return None;
             }
             return item;
         });
 
-        collision = makeGrid(size.x, size.y, 1);
+        collision = makeGrid(width, height, 1);
         collision.items = startGrid.items.copy();
         // makeGrid(map);
 
@@ -115,7 +116,7 @@ class World {
             if (a.locale == PreWork) {
                 if (a.arriveTime == this.time) {
                     arrive(a);
-                    tryMoveActor(a, randomInt(grid.width), randomInt(grid.height));
+                    // tryMoveActor(a, randomInt(grid.width), randomInt(grid.height));
                 }
             }
         }
@@ -135,18 +136,18 @@ class World {
             // if time doing our state ran out, actor does something
             if (a.stateTime == 0) {
                 // result of state
-                if (a.state == Sell) {
-                    // TODO: endSell method?
-                    final success = Math.random() < a.skill * leadChance.get(a.lead);
-                    a.salesAttempts++;
-                    if (success) {
-                        a.salesSuccess++;
-                        final amount = 25 + Math.floor(Math.random() * 25);
-                        addEvent(PlusMoney, a, amount);
-                        money += amount;
-                    }
-                    a.lead = null;
-                }
+                // if (a.state == Sell) {
+                //     // TODO: endSell method?
+                //     final success = Math.random() < a.skill * leadChance.get(a.lead);
+                //     a.salesAttempts++;
+                //     if (success) {
+                //         a.salesSuccess++;
+                //         final amount = 25 + Math.floor(Math.random() * 25);
+                //         addEvent(PlusMoney, a, amount);
+                //         money += amount;
+                //     }
+                //     a.lead = null;
+                // }
 
                 // what to do next
 
@@ -174,7 +175,7 @@ class World {
                     }
 
                     if (a.placement == Desk) {
-                        sell(a);
+                        wait(a, Time.hours(1));
                     }
 
                     // } else {
@@ -228,11 +229,11 @@ class World {
         return false;
     }
 
-    function sell (actor:Actor) {
-        actor.state = Sell;
-        actor.stateTime = Time.QTR_HOUR;
-        actor.lead = getLead();
-    }
+    // function sell (actor:Actor) {
+    //     actor.state = Sell;
+    //     actor.stateTime = Time.QTR_HOUR;
+    //     actor.lead = getLead();
+    // }
 
     function arrive (actor:Actor) {
         actor.locale = AtWork;
@@ -331,18 +332,6 @@ class World {
         return item == null || item == 0;
 
         // return false;
-    }
-
-    function getLead ():LeadTier {
-        for (lead in leadHiLo) {
-            final nums = leadMap.get(lead);
-            if (nums > 0) {
-                leadMap.set(lead, nums - 1);
-                return lead;
-            }
-        }
-
-        return TierF;
     }
 
     // TODO: move parts of this to makeThing method?

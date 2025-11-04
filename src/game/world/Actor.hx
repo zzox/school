@@ -1,7 +1,6 @@
 package game.world;
 
 import core.Types;
-import game.data.Leads.LeadTier;
 import game.util.TimeUtil as Time;
 import game.world.Grid.RotationDir;
 
@@ -58,7 +57,7 @@ class Actor {
     public var y:Float = -16.0;
     public var facing:RotationDir = SouthEast;
     public var state:ActorState = None;
-    public var stateTime:Int = 0;
+    public var stateTime:Int;
     public var move:Null<Move>;
     public var path:Array<IntVec2> = [];
     public var goal:ActorGoal = Work;
@@ -69,9 +68,8 @@ class Actor {
 
     public var desk:Null<Thing>;
     // sales stuff
-    public var lead:Null<LeadTier>;
-    public var salesAttempts:Int = 0;
-    public var salesSuccess:Int = 0;
+    // public var salesAttempts:Int = 0;
+    // public var salesSuccess:Int = 0;
 
     public var arriveTime:Int;
 
@@ -91,6 +89,7 @@ class Actor {
         goal = Work;
         placement = None;
         arriveTime = Math.floor(Time.hours(3) + Math.random() * Time.hours(2));
+        stateTime = 1;
     }
 
     public function assignDesk (desk:Thing) {

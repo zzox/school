@@ -12,7 +12,7 @@ class Main {
 	public static function main() {
         setFullWindowCanvas();
         new Game(
-            'office',
+            'school',
             1280, 720,
             Full,
             new GameScene(),

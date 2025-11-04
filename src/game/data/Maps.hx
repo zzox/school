@@ -1,17 +1,18 @@
 package game.data;
 
 final map1 = '
-xxxxxxxxxxxx
-xx---xx---xx
-xx---xx---xx
-xx---xx---xx
-xx---xx---xx
-xxxxxxxxxxxx
-xxxxxxxxxxxx
-xxxxxxxxxxxx
-xx---xx---xx
-xx---xx---xx
-xx---xx---xx
-xx---xx---xx
-xxxxxxxxxxxx
+oooEoooooooo
+oooooooooooo
+oo---oo---oo
+oo---oo---oo
+oo---oo---oo
+oo---oo---oo
+oooooooooooo
+oooooooooooo
+oo---oo---oo
+oo---oo---oo
+oo---oo---oo
+oo---oo---oo
+oooooooooooo
+ooooooooXooo
 ';
