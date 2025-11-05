@@ -7,6 +7,7 @@ import game.util.Pathfind;
 import game.util.TimeUtil as Time;
 import game.world.Grid;
 import game.world.Thing;
+import haxe.Timer;
 
 enum TileItem {
     Entrance;
@@ -259,12 +260,19 @@ class World {
         }
 #end
 
+#if world_debug
+        final beforePathTime = Timer.stamp();
+#end
+
         final path = pathfind(collision, new IntVec2(actor.getX(), actor.getY()), new IntVec2(x, y), Manhattan);
         // final path = pathfind(makeGrid(grid.width, grid.height, 1), new IntVec2(actor.getX(), actor.getY()), new IntVec2(x, y), Manhattan);
         if (path != null) {
             actor.path = clonePath(path);
             actor.state = Move;
             actor.placement = None; // unsets the actor from a desk
+#if world_debug
+        trace(Timer.stamp() - beforePathTime);
+#end
         } else {
             // TODO: remove
             trace('could not find path');

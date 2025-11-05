@@ -26,6 +26,9 @@ class Points {
     }
 
     public static function makeItems () {}
+
+    // TEMP:
+    public static var iterations:Int = 0;
 }
 
 function Manhattan (p1: IntVec2, p2: IntVec2): Float {
@@ -98,6 +101,10 @@ function createPathFrom (node: PathNode): Array<IntVec2> {
         items.push(node.point);
         node = node.tail;
     }
+
+#if world_debug
+    trace('i: ${Points.iterations}, l: ${items.length}');
+#end
 
     items.reverse();
 
@@ -181,7 +188,7 @@ function pathfind (
     heap.addNode(startNode);
 
     // TEMP:
-    var iterations = 0;
+    Points.iterations = 0;
     while (heap.nodes.length > 0) {
         final currentNode = heap.popNode();
 
@@ -214,7 +221,7 @@ function pathfind (
         };
 
         // safeguarding against infinite loops. may be unnecessary.
-        if (++iterations > 5000) {
+        if (++Points.iterations > 5000) {
             trace('too many iterations');
             break;
         }
