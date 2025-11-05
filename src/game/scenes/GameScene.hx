@@ -337,6 +337,7 @@ class GameScene extends Scene {
         }
     }
 
+    // WARN: following two methods will shift from center if the map is not square
     function rotateLeft () {
         var num = (worldRotation - 1) % 4;
         if (num < 0) num += 4;
