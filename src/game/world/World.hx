@@ -64,6 +64,8 @@ class World {
 
         startGrid = makeGrid(width, height, 1);
 
+        final tt = [];
+
         grid = mapGI(makeGrid(width, height, Tile), (x, y, item) -> {
             final char = rows[y].charAt(x);
             if (char == 'E') {
@@ -78,6 +80,11 @@ class World {
                 setGridItem(startGrid, x, y, 0);
                 return None;
             }
+            // WARN: this will return `Tile`
+            if (char != 'o') {
+                // TODO: thing lookup
+                tt.push({ x: x, y: y });
+            }
             return item;
         });
 
@@ -85,17 +92,21 @@ class World {
         collision.items = startGrid.items.copy();
         // makeGrid(map);
 
-        placeThing(PhoneDesk, 0, 1, SouthEast);
+        for (t in tt) {
+            placeThing(PhoneDesk, t.x, t.y, SouthEast);
+        }
+
+        // placeThing(PhoneDesk, 0, 1, SouthEast);
         // placeThing(PhoneDesk, 2, 1, SouthEast);
-        placeThing(PhoneDesk, 4, 1, SouthEast);
+        // placeThing(PhoneDesk, 4, 1, SouthEast);
         // placeThing(PhoneDesk, 7, 1, SouthEast);
-        placeThing(PhoneDesk, 9, 1, SouthEast);
+        // placeThing(PhoneDesk, 9, 1, SouthEast);
 
         // placeThing(PhoneDesk, 1, 8, SouthEast);
         // placeThing(PhoneDesk, 3, 8, SouthEast);
-        placeThing(PhoneDesk, 5, 8, SouthEast);
+        // placeThing(PhoneDesk, 5, 8, SouthEast);
         // placeThing(PhoneDesk, 7, 8, SouthEast);
-        placeThing(PhoneDesk, 9, 8, SouthEast);
+        // placeThing(PhoneDesk, 9, 8, SouthEast);
 
         for (_ in 0...5) {
             final actor = new Actor('test${Actor.curId}');
