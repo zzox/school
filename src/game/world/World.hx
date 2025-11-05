@@ -285,8 +285,9 @@ class World {
         trace(Timer.stamp() - beforePathTime);
 #end
         } else {
+            wait(actor, Time.MINUTE);
             // TODO: remove
-            trace('could not find path');
+            // trace('could not find path');
         }
     }
 
