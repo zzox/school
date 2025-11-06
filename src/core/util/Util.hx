@@ -53,3 +53,10 @@ function rectOverlap (
         && r1py + r1sy >= r2py
         && r1py <= r2py + r2sy;
 }
+
+function average (arr:Array<Float>):Float {
+    if (arr.length == 0) return 0;
+    return Lambda.fold(arr, (item, res) -> {
+        return item + res;
+    }, 0) / arr.length;
+}

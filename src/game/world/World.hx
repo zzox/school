@@ -55,6 +55,13 @@ class World {
         // entrance = new IntVec2(5, 0);
         // exit = new IntVec2(7, 0);
 
+        // final ttt = Timer.stamp();
+        // final rand = new kha.math.Random(1000);
+        // for (_ in 0...1_000_000) {
+        //     final i = rand.GetFloat();
+        // }
+        // trace(Timer.stamp() - ttt);
+
         final rows = map1.split('\n').filter((item) -> {
             return item != '';
         });
