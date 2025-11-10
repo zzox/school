@@ -1,10 +1,12 @@
 package game.scenes;
 
 import core.gameobjects.BitmapText;
+import core.gameobjects.NineSlice;
 import core.scene.Scene;
 import game.ui.UiText;
 import game.util.TextUtil;
 import game.world.World;
+import kha.Assets;
 
 class UiScene extends Scene {
     var world:World;
@@ -15,6 +17,8 @@ class UiScene extends Scene {
     var middleTextTime:Float = 0.0;
     var middleText:BitmapText;
     var middleSubtext:BitmapText;
+
+    var nineSlice:NineSlice;
 
     public var devTexts:Array<BitmapText> = [];
 
@@ -31,6 +35,8 @@ class UiScene extends Scene {
         entities.push(dollarText = makeBitmapText(camera.width, 9, ''));
         entities.push(middleText = makeBitmapText(0, 64, ''));
         entities.push(middleSubtext = makeBitmapText(0, 80, ''));
+
+        entities.push(nineSlice = new NineSlice(0, 0, 16, 16, 3, 3, 13, 13, 250, 100, Assets.images.ui));
 
         for (i in 0...8) {
             final text = makeBitmapText(4, 100 + i * 10, '');
