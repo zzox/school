@@ -18,7 +18,7 @@ class NineSlice extends GameObject {
 
     public var image:Image;
 
-    public function new (x:Float = 0.0, y:Float = 0.0, sizeX:Int, sizeY:Int, topLeftX:Int, topLeftY:Int, bottomRightX:Int, bottomRightY:Int, elementSizeX:Int, elementSizeY:Int, image:Image) {
+    public function new (x:Float, y:Float, sizeX:Int, sizeY:Int, topLeftX:Int, topLeftY:Int, bottomRightX:Int, bottomRightY:Int, elementSizeX:Int, elementSizeY:Int, image:Image) {
         this.x = x;
         this.y = y;
         this.sizeX = sizeX;

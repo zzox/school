@@ -1,8 +1,10 @@
 package game.scenes;
 
+import core.Game;
 import core.gameobjects.BitmapText;
 import core.gameobjects.NineSlice;
 import core.scene.Scene;
+import game.ui.UiElement;
 import game.ui.UiText;
 import game.util.TextUtil;
 import game.world.World;
@@ -18,7 +20,8 @@ class UiScene extends Scene {
     var middleText:BitmapText;
     var middleSubtext:BitmapText;
 
-    var nineSlice:NineSlice;
+    var el:UiElement;
+    var ct:Int = 0;
 
     public var devTexts:Array<BitmapText> = [];
 
@@ -36,7 +39,10 @@ class UiScene extends Scene {
         entities.push(middleText = makeBitmapText(0, 64, ''));
         entities.push(middleSubtext = makeBitmapText(0, 80, ''));
 
-        entities.push(nineSlice = new NineSlice(0, 0, 16, 16, 3, 3, 13, 13, 250, 100, Assets.images.ui));
+        // entities.push(nineSlice = new NineSlice(0, 0, 16, 16, 3, 3, 13, 13, 250, 100, Assets.images.ui));
+        entities.push(el = new UiElement(0, 0, 16, 16, 3, 3, 13, 13, 250, 100, Assets.images.ui, () -> {
+            ct++;
+        }));
 
         for (i in 0...8) {
             final text = makeBitmapText(4, 100 + i * 10, '');
@@ -56,6 +62,9 @@ class UiScene extends Scene {
         middleTextTime -= delta;
         middleText.setPosition(Math.floor((camera.width / camera.scale - middleText.textWidth) / 2), middleText.y);
         middleText.visible = middleTextTime > 0;
+
+        el.checkPointer(Math.floor(Game.mouse.position.x / camera.scale), Math.floor(Game.mouse.position.y / camera.scale));
+        devTexts[devTexts.length - 1].setText(ct + '');
     }
 
     public function setMiddleText (text:String, time:Float) {

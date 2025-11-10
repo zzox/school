@@ -54,6 +54,10 @@ function rectOverlap (
         && r1py <= r2py + r2sy;
 }
 
+function pointInRect (px:Float, py:Float, rx:Float, ry:Float, rw:Float, rh:Float) {
+    return px >= rx && py >= ry && px < rx + rw && py < ry + rh;
+}
+
 function average (arr:Array<Float>):Float {
     if (arr.length == 0) return 0;
     return Lambda.fold(arr, (item, res) -> {
