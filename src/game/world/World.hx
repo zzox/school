@@ -331,6 +331,7 @@ class World {
                     time: Math.round(100000 / actor.speed)
                 }
             } else {
+                // trace('someone is in our way');
                 wait(actor, Time.MINUTE);
             }
         } else {

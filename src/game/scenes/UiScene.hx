@@ -64,6 +64,7 @@ class UiScene extends Scene {
         middleText.visible = middleTextTime > 0;
 
         el.checkPointer(Math.floor(Game.mouse.position.x / camera.scale), Math.floor(Game.mouse.position.y / camera.scale));
+        el.setIndexFromState();
         devTexts[devTexts.length - 1].setText(ct + '');
     }
 
