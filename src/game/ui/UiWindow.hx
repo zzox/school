@@ -1,6 +1,7 @@
 package game.ui;
 
 import core.Types;
+import core.gameobjects.BitmapText;
 import core.gameobjects.GameObject;
 import core.system.Camera;
 import game.ui.UiElement;
@@ -34,16 +35,30 @@ class UiWindow {
     public var cancel:Null<UiElement>;
     var oChildren:Array<OChildElements> = [];
 
+    var text:BitmapText;
+    var temp:Int = 0;
+
     public function new (x:Int, y:Int) {
+        final topbar = new UiElement(0, 0, 16, 16, 3, 3, 13, 13, 100, 16, 8, Assets.images.ui);
+        final bottomBg = new UiElement(0, 0, 16, 16, 3, 3, 13, 13, 100, 100, 0, Assets.images.ui);
+        final button = new UiElement(0, 0, 16, 16, 3, 3, 13, 13, 48, 24, 4, Assets.images.ui, () -> {
+            temp++;
+        });
 
-        final topbar = new UiElement(0, 0, 16, 16, 3, 3, 13, 13, 100, 16, Assets.images.ui);
-        final bottomBg = new UiElement(0, 0, 16, 16, 3, 3, 13, 13, 100, 100, Assets.images.ui);
-
-        children = [{ x: 0, y: 0, el: topbar }, { x: 0, y: 16, el: bottomBg }];
+        children = [{ x: 0, y: 0, el: topbar }, { x: 0, y: 16, el: bottomBg }, { x: 4, y: 50, el: button }];
 
         grabbable = topbar;
 
-        oChildren = [{ x: 24, y: 50, el: makeBitmapText(0, 0, (Math.random() + '').split('.')[1].substr(0, 4)) }];
+        text = makeBitmapText(0, 0, '');
+
+        oChildren = [{ x: 24, y: 70, el: text }];
+
+        this.x = x;
+        this.y = y;
+    }
+
+    public function update () {
+        text.setText(temp + '');
     }
 
     public function render (g2:Graphics, cam:Camera) {

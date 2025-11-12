@@ -25,11 +25,14 @@ class UiElement extends NineSlice {
     public function new (x:Float, y:Float, sizeX:Int, sizeY:Int,
         topLeftX:Int, topLeftY:Int, bottomRightX:Int, bottomRightY:Int,
         elementSizeX:Int, elementSizeY:Int,
+        baseIndex:Int,
         image:Image,
         ?onClick:UiEvent, ?onHover:UiEvent
     ) {
         super(x, y, sizeX, sizeY, topLeftX, topLeftY, bottomRightX, bottomRightY, elementSizeX, elementSizeY, image);
 
+        tileIndex = baseIndex;
+        this.baseIndex = baseIndex;
         this.onClick = onClick;
         // this.onHover = onHover ?? noop;
     }

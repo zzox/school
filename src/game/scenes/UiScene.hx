@@ -12,6 +12,7 @@ import game.util.TextUtil;
 import game.world.World;
 import kha.Assets;
 import kha.graphics2.Graphics;
+import kha.input.Mouse;
 
 class UiScene extends Scene {
     var world:World;
@@ -83,42 +84,51 @@ class UiScene extends Scene {
         var bringFront = windows.length;
         var hovered = false;
         var w = windows.length;
+        Mouse.get().setSystemCursor(MouseCursor.Default);
         while (--w >= 0) {
             final win = windows[w];
 
-            for (c in win.children) {
-                // for every button update state and set the tile index
-                c.el.checkPointer(mouseX, mouseY);
-                if (!c.el.disabled && c.el.onClick != null) {
-                    c.el.setIndexFromState();
-                }
-
-                if (c.el == win.grabbable && c.el.hovered && Game.mouse.justPressed(0)) {
-                    win.heldPos = new IntVec2(Math.floor(mouseX - win.x), Math.floor(mouseY - win.y));
-                }
-
-                // mark if we hovered over any of these or if an item was pressed on
-                if (c.el.hovered || c.el.pressed) {
-                    hovered = true;
-                }
-
-                if (c.el.hovered && c.el.pressed) {
-                    bringFront = w;
-                }
-            }
-
-            if (win.heldPos != null) {
-                win.x = mouseX - win.heldPos.x;
-                win.y = mouseY - win.heldPos.y;
-                if (Game.mouse.justReleased(0)) {
-                    win.heldPos = null;
-                }
-            }
-
             // if we are over any of these ui elements, we can't do anything to the next element under us
-            if (hovered) {
-                break;
-            }
+            if (!hovered) {
+                for (c in win.children) {
+                    // for every button update state and set the tile index
+                    c.el.checkPointer(mouseX, mouseY);
+                    if (!c.el.disabled && c.el.onClick != null) {
+                        c.el.setIndexFromState();
+                        if (c.el.hovered) {
+                            Mouse.get().setSystemCursor(MouseCursor.Pointer);
+                        }
+                    }
+
+                    // if we're over the grabbable item
+                    if (c.el == win.grabbable && c.el.hovered) {
+                        Mouse.get().setSystemCursor(MouseCursor.Grab);
+                        if (Game.mouse.justPressed(0)) {
+                            win.heldPos = new IntVec2(Math.floor(mouseX - win.x), Math.floor(mouseY - win.y));
+                        }
+                    }
+
+                    // mark if we hovered over any of these or if an item was pressed on
+                    if (c.el.hovered || c.el.pressed) {
+                        hovered = true;
+                    }
+
+                    if (c.el.hovered && c.el.pressed) {
+                        bringFront = w;
+                    }
+                }
+
+                if (win.heldPos != null) {
+                    win.x = mouseX - win.heldPos.x;
+                    win.y = mouseY - win.heldPos.y;
+                    if (Game.mouse.justReleased(0)) {
+                        win.heldPos = null;
+                    }
+                    Mouse.get().setSystemCursor(MouseCursor.Grabbing);
+                }
+            } else {}
+
+            win.update();
         }
 
         // if we need to move around items, do so here
