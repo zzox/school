@@ -5,21 +5,22 @@ import core.gameobjects.NineSlice;
 import core.util.Util;
 import kha.Image;
 
-
 // is this more or less performant than a null check?
-function noop () {}
+// function noop () {}
 
 typedef UiEvent = Void -> Void;
 
 class UiElement extends NineSlice {
     var baseIndex:Int;
 
-    var disabled:Bool = false;
-    var pressed:Bool = false;
-    var hovered:Bool = false;
+    // if pointer is over the element
+    public var hovered:Bool = false;
+    // if pointer was pressed down over the element
+    public var pressed:Bool = false;
+    public var disabled:Bool = false;
 
-    var onClick:UiEvent;
-    var onHover:UiEvent;
+    public var onClick:Null<UiEvent>;
+    // public var onHover:UiEvent;
 
     public function new (x:Float, y:Float, sizeX:Int, sizeY:Int,
         topLeftX:Int, topLeftY:Int, bottomRightX:Int, bottomRightY:Int,
@@ -29,8 +30,8 @@ class UiElement extends NineSlice {
     ) {
         super(x, y, sizeX, sizeY, topLeftX, topLeftY, bottomRightX, bottomRightY, elementSizeX, elementSizeY, image);
 
-        this.onClick = onClick ?? noop;
-        this.onHover = onHover ?? noop;
+        this.onClick = onClick;
+        // this.onHover = onHover ?? noop;
     }
 
     override function update (delta:Float) {}
@@ -40,7 +41,7 @@ class UiElement extends NineSlice {
         if (pointInRect(px, py, x, y, elementSizeX, elementSizeY)) {
             hovered = true;
             if (pressed && Game.mouse.justReleased(0)) {
-                onClick();
+                if (onClick != null) onClick();
             }
 
             if (Game.mouse.justPressed(0)) {

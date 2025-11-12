@@ -1,12 +1,15 @@
 package game.ui;
 
+import core.Types;
 import core.gameobjects.GameObject;
 import core.system.Camera;
+import game.ui.UiElement;
 import kha.Assets;
 import kha.graphics2.Graphics;
 
 typedef ChildElements = {
-    var el:GameObject;
+    var el:UiElement;
+    // var el:GameObject;
     var x:Int;
     var y:Int;
 }
@@ -15,6 +18,8 @@ typedef ChildElements = {
 class UiWindow extends GameObject {
     // public var x:Int;
     // public var y:Int;
+
+    public var heldPos:Null<IntVec2>;
 
     public var children:Array<ChildElements> = [];
     public var grabbable:Null<UiElement>;
