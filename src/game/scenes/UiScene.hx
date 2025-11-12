@@ -52,7 +52,9 @@ class UiScene extends Scene {
 
         final window = new UiWindow(0, 0);
         windows.push(window);
-        entities.push(window);
+
+        final window2 = new UiWindow(16, 16);
+        windows.push(window2);
 
         for (i in 0...8) {
             final text = makeBitmapText(4, 100 + i * 10, '');
@@ -121,7 +123,9 @@ class UiScene extends Scene {
 
         // if we need to move around items, do so here
         if (bringFront < windows.length - 1) {
-            trace(bringFront);
+            final newTop = windows[bringFront];
+            windows.remove(newTop);
+            windows.push(newTop);
         }
 
         // HACK:
@@ -133,8 +137,19 @@ class UiScene extends Scene {
         middleTextTime = time;
     }
 
-    // override function render (g2:Graphics, clears:Bool) {
-    //     super.render(g2, clears);
-    //     for (w in windows) w.render(g2, camera);
-    // }
+    override function render (g2:Graphics, clears:Bool) {
+        g2.begin(clears, camera.bgColor);
+
+        for (e in entities) {
+            if (e.visible) e.render(g2, camera);
+        }
+        for (w in windows) w.render(g2, camera);
+
+// #if debug_physics
+//         for (sprite in entities) {
+//             sprite.renderDebug(g2, camera);
+//         }
+// #end
+        g2.end();
+    }
 }
