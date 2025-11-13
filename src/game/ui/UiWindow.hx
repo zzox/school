@@ -15,7 +15,7 @@ typedef ChildElements = {
     var x:Int;
     var y:Int;
 }
-
+// TODO: combine these somehow
 typedef OChildElements = {
     // var el:UiElement;
     var el:GameObject;
@@ -27,6 +27,9 @@ typedef OChildElements = {
 class UiWindow {
     public var x:Int;
     public var y:Int;
+
+    public var width:Int;
+    public var height:Int;
 
     // parent will close when set to true
     public var closed:Bool = false;
@@ -59,6 +62,9 @@ class UiWindow {
 
         this.x = x;
         this.y = y;
+        // TODO: compute width and height
+        this.width = 100;
+        this.height = 116;
     }
 
     public function update () {

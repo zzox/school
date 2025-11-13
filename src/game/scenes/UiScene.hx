@@ -5,6 +5,7 @@ import core.Types.IntVec2;
 import core.gameobjects.BitmapText;
 import core.gameobjects.NineSlice;
 import core.scene.Scene;
+import core.util.Util;
 import game.ui.UiElement;
 import game.ui.UiText;
 import game.ui.UiWindow;
@@ -80,6 +81,9 @@ class UiScene extends Scene {
         final mouseX = Math.floor(Game.mouse.position.x / camera.scale);
         final mouseY = Math.floor(Game.mouse.position.y / camera.scale);
 
+        final width = Math.round(game.width / camera.scale);
+        final height = Math.round(game.height / camera.scale);
+
         // update windows
         var bringFront = windows.length;
         var hovered = false;
@@ -114,7 +118,7 @@ class UiScene extends Scene {
                         }
                     }
 
-                    // mark if we hovered over any of these or if an item was pressed on
+                    // mark if we hovered over any of these or if an item was pressed
                     if (c.el.hovered || c.el.pressed) {
                         hovered = true;
                     }
@@ -129,8 +133,9 @@ class UiScene extends Scene {
                     if (buttonPressed) {
                         win.heldPos = null;
                     } else {
-                        win.x = mouseX - win.heldPos.x;
-                        win.y = mouseY - win.heldPos.y;
+                        // win.y = mouseY - win.heldPos.y;
+                        win.x = Std.int(clamp(mouseX - win.heldPos.x, 0, width - win.width));
+                        win.y = Std.int(clamp(mouseY - win.heldPos.y, 0, height - win.height));
                         if (Game.mouse.justReleased(0)) {
                             win.heldPos = null;
                         }
