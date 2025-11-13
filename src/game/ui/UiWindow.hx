@@ -28,8 +28,8 @@ class UiWindow {
     public var x:Int;
     public var y:Int;
 
-    public var width:Int;
-    public var height:Int;
+    public var width:Int = 0;
+    public var height:Int = 0;
 
     // parent will close when set to true
     public var closed:Bool = false;
@@ -52,7 +52,10 @@ class UiWindow {
         });
         final xButton = new XButton(() -> { closed = true; });
 
-        children = [{ x: 0, y: 0, el: topbar }, { x: 0, y: 16, el: bottomBg }, { x: 100 - 14, y: 2, el: xButton }, { x: 4, y: 50, el: button }];
+        addChild(0, 0, topbar);
+        addChild(0, 16, bottomBg);
+        addChild(100 - 14, 2, xButton);
+        addChild(4, 50, button);
 
         grabbable = topbar;
 
@@ -62,9 +65,6 @@ class UiWindow {
 
         this.x = x;
         this.y = y;
-        // TODO: compute width and height
-        this.width = 100;
-        this.height = 116;
     }
 
     public function update () {
@@ -82,6 +82,12 @@ class UiWindow {
             c.el.y = y + c.y;
             c.el.render(g2, cam);
         }
+    }
+
+    function addChild (x:Int, y:Int, el:UiElement) {
+        children.push({ x: x, y: y, el: el });
+        width = Std.int(Math.max(width, x + el.elementSizeX));
+        height = Std.int(Math.max(height, y + el.elementSizeY));
     }
 }
 
