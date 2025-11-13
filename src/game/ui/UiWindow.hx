@@ -45,6 +45,7 @@ class UiWindow {
     var temp:Int = 0;
 
     public function new (x:Int, y:Int) {
+        // these are all at 0,0 because they'll be positioned in `render`
         final topbar = new UiElement(0, 0, 16, 16, 3, 3, 13, 13, 100, 16, 8, Assets.images.ui);
         final bottomBg = new UiElement(0, 0, 16, 16, 3, 3, 13, 13, 100, 100, 0, Assets.images.ui);
         final button = new UiElement(0, 0, 16, 16, 3, 3, 13, 13, 48, 24, 4, Assets.images.ui, () -> {

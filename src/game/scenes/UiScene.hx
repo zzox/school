@@ -3,15 +3,13 @@ package game.scenes;
 import core.Game;
 import core.Types.IntVec2;
 import core.gameobjects.BitmapText;
-import core.gameobjects.NineSlice;
 import core.scene.Scene;
 import core.util.Util;
-import game.ui.UiElement;
 import game.ui.UiText;
 import game.ui.UiWindow;
+import game.util.Debug;
 import game.util.TextUtil;
 import game.world.World;
-import kha.Assets;
 import kha.graphics2.Graphics;
 import kha.input.Mouse;
 
@@ -27,11 +25,9 @@ class UiScene extends Scene {
 
     var windows:Array<UiWindow> = [];
 
-    // TEMP:
-    // var el:UiElement;
-    var ct:Int = 0;
-
+#if debug
     public var devTexts:Array<BitmapText> = [];
+#end
 
     public function new (world:World) {
         super();
@@ -156,8 +152,10 @@ class UiScene extends Scene {
 
         windows = windows.filter(w -> !w.closed);
 
-        // HACK:
-        devTexts[devTexts.length - 1].setText(ct + '');
+#if debug
+        devTexts[2].setText('FPS: ${Debug.renderFrames.length}, avg: ${Math.round(average(Debug.renderTimes) * 1000)}ms');
+        devTexts[3].setText('UPS: ${Debug.updateFrames.length}, avg: ${Math.round(average(Debug.updateTimes) * 1000)}ms');
+#end
     }
 
     public function setMiddleText (text:String, time:Float) {

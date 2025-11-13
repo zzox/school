@@ -6,6 +6,7 @@ import core.scene.Scene;
 import core.util.Util.average;
 import game.sprites.Particle;
 import game.ui.UiText;
+import game.util.Debug;
 import game.util.Utils;
 import game.world.Grid;
 import game.world.World;
@@ -44,14 +45,6 @@ class GameScene extends Scene {
     var maxX:Int = 0;
     var maxY:Int = 0;
 
-#if debug
-    var renderFrames:Array<Float> = []; // how many frames happened in the last second
-    var renderTimes:Array<Float>; // list of all times it took to render (in seconds) (stays the same length)
-
-    var updateFrames:Array<Float> = []; // how many update calls happened in the last second
-    var updateTimes:Array<Float>; // list of all times it took to update (in seconds) (stays the same length)
-#end
-
     override function create () {
         super.create();
 
@@ -80,8 +73,8 @@ class GameScene extends Scene {
         }
 
 #if debug
-    renderTimes = [for (i in 0...300) 0.0]; // 5 seconds on 6fps monitors
-    updateTimes = [for (i in 0...300) 0.0]; // ~5 seconds
+    Debug.renderTimes = [for (i in 0...300) 0.0]; // 5 seconds on 6fps monitors
+    Debug.updateTimes = [for (i in 0...300) 0.0]; // ~5 seconds
 #end
     }
 
@@ -97,11 +90,7 @@ class GameScene extends Scene {
         uiScene.devTexts[0].setText('${Game.mouse.position.x},${Game.mouse.position.y}, ${screenPosX},${screenPosY}');
 
         final tilePosAt = getTilePosAt(screenPosX, screenPosY, worldRotation, world.grid.width, world.grid.height);
-#if debug
         uiScene.devTexts[1].setText('${tilePosAt.x},${tilePosAt.y}');
-        uiScene.devTexts[2].setText('FPS: ${renderFrames.length}, avg: ${Math.round(average(renderTimes) * 1000)}ms');
-        uiScene.devTexts[3].setText('UPS: ${updateFrames.length}, avg: ${Math.round(average(updateTimes) * 1000)}ms');
-#end
         // uiScene.setMiddleText('${camCenterX()} ${camCenterY()} ${minX} ${minY} ${maxX} ${maxY}', 1.0);
 
         if (Game.keys.justPressed(KeyCode.R)) {
@@ -146,13 +135,13 @@ class GameScene extends Scene {
 #if debug
         final time = Timer.stamp();
         final updateTime = time - updateStart;
-        updateTimes.push(updateTime);
-        updateTimes.shift();
+        Debug.updateTimes.push(updateTime);
+        Debug.updateTimes.shift();
 
-        updateFrames.push(time);
+        Debug.updateFrames.push(time);
         while (true) {
-            if (updateFrames[0] != null && updateFrames[0] < time - 0.999) {
-                updateFrames.shift();
+            if (Debug.updateFrames[0] != null && Debug.updateFrames[0] < time - 0.999) {
+                Debug.updateFrames.shift();
             } else {
                 break;
             }
@@ -285,13 +274,13 @@ class GameScene extends Scene {
 #if debug
         final time = Timer.stamp();
         final renderTime = time - renderStart;
-        renderTimes.push(renderTime);
-        renderTimes.shift();
+        Debug.renderTimes.push(renderTime);
+        Debug.renderTimes.shift();
 
-        renderFrames.push(time);
+        Debug.renderFrames.push(time);
         while (true) {
-            if (renderFrames[0] != null && renderFrames[0] < time - 0.999) {
-                renderFrames.shift();
+            if (Debug.renderFrames[0] != null && Debug.renderFrames[0] < time - 0.999) {
+                Debug.renderFrames.shift();
             } else {
                 break;
             }
