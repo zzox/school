@@ -83,6 +83,7 @@ class UiScene extends Scene {
         // update windows
         var bringFront = windows.length;
         var hovered = false;
+        var buttonPressed = false;
         var w = windows.length;
         Mouse.get().setSystemCursor(MouseCursor.Default);
         while (--w >= 0) {
@@ -91,17 +92,22 @@ class UiScene extends Scene {
             // if we are over any of these ui elements, we can't do anything to the next element under us
             if (!hovered) {
                 for (c in win.children) {
-                    // for every button update state and set the tile index
+                    // for every button update state and set the tile index if it has a onclick,
+                    // we assume it is a button.
                     c.el.checkPointer(mouseX, mouseY);
                     if (!c.el.disabled && c.el.onClick != null) {
                         c.el.setIndexFromState();
                         if (c.el.hovered) {
                             Mouse.get().setSystemCursor(MouseCursor.Pointer);
                         }
+                        if (c.el.pressed) {
+                            buttonPressed = true;
+                            Mouse.get().setSystemCursor(MouseCursor.Pointer);
+                        }
                     }
 
-                    // if we're over the grabbable item
-                    if (c.el == win.grabbable && c.el.hovered) {
+                    // if we're over the grabbable item (and we aren't pressing a button)
+                    if (c.el == win.grabbable && c.el.hovered && !buttonPressed) {
                         Mouse.get().setSystemCursor(MouseCursor.Grab);
                         if (Game.mouse.justPressed(0)) {
                             win.heldPos = new IntVec2(Math.floor(mouseX - win.x), Math.floor(mouseY - win.y));
@@ -119,12 +125,17 @@ class UiScene extends Scene {
                 }
 
                 if (win.heldPos != null) {
-                    win.x = mouseX - win.heldPos.x;
-                    win.y = mouseY - win.heldPos.y;
-                    if (Game.mouse.justReleased(0)) {
+                    // unset if we are also pressing a button
+                    if (buttonPressed) {
                         win.heldPos = null;
+                    } else {
+                        win.x = mouseX - win.heldPos.x;
+                        win.y = mouseY - win.heldPos.y;
+                        if (Game.mouse.justReleased(0)) {
+                            win.heldPos = null;
+                        }
+                        Mouse.get().setSystemCursor(MouseCursor.Grabbing);
                     }
-                    Mouse.get().setSystemCursor(MouseCursor.Grabbing);
                 }
             } else {}
 
@@ -137,6 +148,8 @@ class UiScene extends Scene {
             windows.remove(newTop);
             windows.push(newTop);
         }
+
+        windows = windows.filter(w -> !w.closed);
 
         // HACK:
         devTexts[devTexts.length - 1].setText(ct + '');

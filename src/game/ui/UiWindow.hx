@@ -28,6 +28,9 @@ class UiWindow {
     public var x:Int;
     public var y:Int;
 
+    // parent will close when set to true
+    public var closed:Bool = false;
+
     public var heldPos:Null<IntVec2>;
 
     public var children:Array<ChildElements> = [];
@@ -44,8 +47,9 @@ class UiWindow {
         final button = new UiElement(0, 0, 16, 16, 3, 3, 13, 13, 48, 24, 4, Assets.images.ui, () -> {
             temp++;
         });
+        final xButton = new XButton(() -> { closed = true; });
 
-        children = [{ x: 0, y: 0, el: topbar }, { x: 0, y: 16, el: bottomBg }, { x: 4, y: 50, el: button }];
+        children = [{ x: 0, y: 0, el: topbar }, { x: 0, y: 16, el: bottomBg }, { x: 100 - 14, y: 2, el: xButton }, { x: 4, y: 50, el: button }];
 
         grabbable = topbar;
 
@@ -72,5 +76,12 @@ class UiWindow {
             c.el.y = y + c.y;
             c.el.render(g2, cam);
         }
+    }
+}
+
+// TODO: move to ui utils file
+class XButton extends UiElement {
+    public function new (callback:UiEvent) {
+        super(0, 0, 16, 16, 3, 3, 13, 13, 12, 12, 12, Assets.images.ui, callback);
     }
 }
